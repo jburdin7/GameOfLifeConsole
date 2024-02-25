@@ -5,7 +5,7 @@ using System.Threading;
 class GameOfLife
 {
 
-    static void Main()
+    public static void Main()
     {
         Grid grid = new Grid(20);
         //TODO: Users choose dimesions of grid
