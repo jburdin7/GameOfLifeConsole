@@ -23,7 +23,7 @@
 
         private bool IsValidString(string input, string[] validChoices)
         {
-            return validChoices.Contains(input.ToLower());
+            return validChoices.Contains(input);
         }
     }
 }
