@@ -2,18 +2,11 @@
 {
     class InputValidator
     {
-        private string[] ValidChoices { get; set; }
-
-        public InputValidator(string[] validChoices)
-        {
-            this.ValidChoices = validChoices;
-        }
-
-        public bool ValidateString(string input)
+        public bool ValidateString(string input, string[] validChoices)
         {
             if (!string.IsNullOrWhiteSpace(input))
             {
-                if(IsValidString(input, ValidChoices))
+                if(IsValidString(input, validChoices))
                 {
                     return true;
                 }
