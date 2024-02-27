@@ -12,38 +12,42 @@ namespace GameOfLifeConsole
         public void Run()
         {
             InputValidator InputValidator = new InputValidator();
-            bool inMenu = true;
+            bool isRunning = true;
             int speed = 500;
             int gridSize = 0;
 
-            while (inMenu)
+            while (isRunning)
             {
-                Console.WriteLine("~Conway's Game of Life~");
-                Console.WriteLine("|----Menu-----|");
-                Console.WriteLine("| Start       |");
-                Console.WriteLine("| Close       |");
-                Console.WriteLine("|-------------|\r\n");
+                bool hasInvalidMenuInput = true;
 
-                string userMenuChoice = Console.ReadLine().ToLower();
-                bool isValidUserChoice = InputValidator.ValidateString(userMenuChoice, new[] {"start", "close"} );
-
-                bool isRunning = false;
-
-                if (isValidUserChoice)
+                while(hasInvalidMenuInput)
                 {
-                    if (userMenuChoice.Equals("start"))
+                    Console.WriteLine("~Conway's Game of Life~");
+                    Console.WriteLine("|----Menu-----|");
+                    Console.WriteLine("| Start       |");
+                    Console.WriteLine("| Close       |");
+                    Console.WriteLine("|-------------|\r\n");
+
+                    string userMenuChoice = Console.ReadLine().ToLower();
+                    bool isValidUserChoice = InputValidator.ValidateString(userMenuChoice, new[] { "start", "close" });
+
+                    if (isValidUserChoice)
                     {
-                        isRunning = true;
+                        if (userMenuChoice.Equals("start"))
+                        {
+                            isRunning = true;
+                        }
+                        else if (userMenuChoice.Equals("close"))
+                        {
+                            Environment.Exit(0); //NOTES: or set 'inMenu' to 'false'
+                        }
+                        hasInvalidMenuInput = false;
                     }
-                    else if (userMenuChoice.Equals("close"))
+                    else
                     {
-                        Environment.Exit(0); //NOTES: or set 'inMenu' to 'false'
+                        Console.WriteLine("Incorrect Choice: Please select from the menu options.\r\n");
+                        Thread.Sleep(1000);
                     }
-                }
-                else
-                {
-                    Console.WriteLine("Incorrect Choice: Please select from the menu options.\r\n");
-                    Thread.Sleep(1000);
                 }
 
                 bool hasInvalidSpeed = true;
@@ -56,7 +60,7 @@ namespace GameOfLifeConsole
                     Console.WriteLine("Fast");
 
                     string userSpeedChoice = Console.ReadLine().ToLower();
-                    isValidUserChoice = InputValidator.ValidateString(userSpeedChoice, new[] { "slow", "normal", "fast" });
+                    bool isValidUserChoice = InputValidator.ValidateString(userSpeedChoice, new[] { "slow", "normal", "fast" });
 
                     if (isValidUserChoice)
                     {
@@ -82,7 +86,7 @@ namespace GameOfLifeConsole
                 {
                     Console.WriteLine("How big would you like the grid?\r\n");
                     string userGridChoice = Console.ReadLine();
-                    isValidUserChoice = InputValidator.ValidateNumber(userGridChoice, ref gridSize);
+                    bool isValidUserChoice = InputValidator.ValidateNumber(userGridChoice, ref gridSize);
 
                     if (!isValidUserChoice)
                     {
