@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,8 +11,10 @@ namespace GameOfLifeConsole
     {
         public void Run()
         {
-            InputValidator stringInputValidator = new InputValidator();
+            InputValidator InputValidator = new InputValidator();
             bool inMenu = true;
+            int speed = 500;
+            int gridSize = 0;
 
             while (inMenu)
             {
@@ -22,7 +25,7 @@ namespace GameOfLifeConsole
                 Console.WriteLine("|-------------|\r\n");
 
                 string userMenuChoice = Console.ReadLine().ToLower();
-                bool isValidUserChoice = stringInputValidator.ValidateString(userMenuChoice, new[] {"start", "close"} );
+                bool isValidUserChoice = InputValidator.ValidateString(userMenuChoice, new[] {"start", "close"} );
 
                 bool isRunning = false;
 
@@ -43,34 +46,56 @@ namespace GameOfLifeConsole
                     Thread.Sleep(1000);
                 }
 
-                Console.WriteLine("How fast would you like the simulation to be?");
-                Console.WriteLine("Slow");
-                Console.WriteLine("Normal");
-                Console.WriteLine("Fast");
+                bool hasInvalidSpeed = true;
 
-                int speed = 500;
-                string userSpeedChoice = Console.ReadLine().ToLower();
-                isValidUserChoice = stringInputValidator.ValidateString(userSpeedChoice, new[] { "slow", "normal", "fast" });
-
-                if (isValidUserChoice)
+                while(hasInvalidSpeed)
                 {
-                    if (userSpeedChoice.Equals("slow"))
+                    Console.WriteLine("How fast would you like the simulation to be?");
+                    Console.WriteLine("Slow");
+                    Console.WriteLine("Normal");
+                    Console.WriteLine("Fast");
+
+                    string userSpeedChoice = Console.ReadLine().ToLower();
+                    isValidUserChoice = InputValidator.ValidateString(userSpeedChoice, new[] { "slow", "normal", "fast" });
+
+                    if (isValidUserChoice)
                     {
-                        speed = 1000;
+                        hasInvalidSpeed = false;
+                        if (userSpeedChoice.Equals("slow"))
+                        {
+                            speed = 1000;
+                        }
+                        else if (userSpeedChoice.Equals("fast"))
+                        {
+                            speed = 100;
+                        }
                     }
-                    else if (userSpeedChoice.Equals("fast"))
+                    else
                     {
-                        speed = 100;
+                        Console.WriteLine("Incorrect Choice: Please select a speed.\r\n");
+                        Thread.Sleep(1000);
                     }
                 }
-                else
-                {
-                    Console.WriteLine("Incorrect Choice: Please select a speed.\r\n");
-                    Thread.Sleep(1000);
-                }
 
-                Grid grid = new Grid(20);
-                //TODO: Users choose dimesions of grid
+                bool hasInvalidGridSize = true;
+                while(hasInvalidGridSize)
+                {
+                    Console.WriteLine("How big would you like the grid?\r\n");
+                    string userGridChoice = Console.ReadLine();
+                    isValidUserChoice = InputValidator.ValidateNumber(userGridChoice, ref gridSize);
+
+                    if (!isValidUserChoice)
+                    {
+                        Console.WriteLine("Invalid Input: Please input a number.\r\n");
+                        Thread.Sleep(1000);
+                    }
+                    else
+                    {
+                        hasInvalidGridSize = false;
+                    }
+                }
+                
+                Grid grid = new Grid(gridSize);
 
                 while (isRunning)
                 {
